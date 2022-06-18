@@ -4,4 +4,38 @@
 
 {% block content %}
 
+    <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">&emsp;&emsp;&emsp;&emsp;Coin</th>
+            <th scope="col">24h Low</th>
+            <th scope="col">24h High</th>
+            <th scope="col">Price Change</th>
+            <th scope="col">Price</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for datas in data %}
+            <tr>
+                <th scope="row">{{ datas['market_cap_rank'] }}</th>
+                <td><img src="{{ datas['image'] }}" alt=""
+                         style="width:30px; height:30px;">&emsp;&emsp;{{ datas['symbol'].upper() }}</td>
+                <td>${{ datas['low_24h'] }}</td>
+                <td>${{ datas['high_24h'] }}</td>
+                {% if datas['price_change_percentage_24h'] > 0 %}
+                    <td style="color: mediumseagreen;">{{ "{:0.2f}%".format(datas['price_change_percentage_24h']) }}</td>
+                {% else %}
+                    <td style="color: red;">{{ "{:0.2f}%".format(datas['price_change_percentage_24h']) }}</td>
+                {% endif %}
+                <td>${{ datas['current_price'] }}</td>
+                <td>
+                    <button type="button" class="btn btn-success">Buy</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}
