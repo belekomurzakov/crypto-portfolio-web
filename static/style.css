@@ -1,0 +1,300 @@
+/* --- NAVIGATION --- */
+nav {
+    background: #282828;
+    position: sticky;
+    width: inherit;
+    max-width: inherit;
+    opacity: inherit;
+    top: 0;
+}
+
+#menu {
+    display: flex;
+    justify-content: flex-start;
+}
+
+#menu a {
+    color: white;
+    font-size: 1.1rem;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 1rem 1.5rem;
+}
+
+#menu a:hover {
+    background: #9d9d9d;
+}
+
+#menu .login, .logout {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 1em;
+    margin-left: auto;
+}
+
+nav .hamburger {
+    display: none;
+    color: white;
+    padding: 0.8em;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    #menu {
+        flex-wrap: wrap;
+        position: fixed;
+        background: #78bc1b;
+    }
+
+    #menu a {
+        width: 100%;
+    }
+
+    nav .hamburger {
+        display: block;
+    }
+
+    /* Hide the menu on mobiles if it is not expanded manually using the hamburher icon. */
+    #menu:not(.expanded) {
+        display: none;
+    }
+
+    #menu .login {
+        padding: 1em 1em;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+/* --- SIGN UP FORM --- */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
+    margin: auto;
+    max-width: 1000px;
+
+}
+
+* {
+    box-sizing: border-box
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password], input[type=tel], input[type=date], #role, #company, #form {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+h3 {
+    text-align: center;
+}
+
+/* Set a style for all buttons */
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+#create {
+    background-color: #0a5605;
+    color: white;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+    width: 9%;
+    float: right;
+    border-radius: 12px;
+}
+
+button:hover {
+    opacity: 1;
+}
+
+/* Add padding to container elements */
+.container {
+    padding: 16px;
+}
+
+/* Clear floats */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Change styles for cancel button and signup button on extra small screens */
+@media screen and (max-width: 300px) {
+    .SignUpButton {
+        width: 100%;
+    }
+}
+
+h4 {
+    text-align: center;
+}
+
+/* --- SIGN UP FORM --- */
+
+
+/* --- MESSAGES START--- */
+
+.messages {
+    background: white;
+    padding: 1em 1em 0 1em;
+}
+
+.message {
+    padding: 1em 2em;
+    border-width: 1px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.message:not(:last-child) {
+    margin-bottom: 1em;
+}
+
+.message.success {
+    background: #e9ffc0;
+    color: #599f1d;
+    border-color: #599f1d;
+}
+
+.message.error {
+    background: pink;
+    color: red;
+    border-color: red;
+}
+
+/* --- MESSAGES END --- */
+
+
+/* --- HEADER --- */
+header {
+    background-size: cover;
+    background-position: top center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 20rem;
+}
+
+header h1 {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+    text-align: right;
+    font-size: 2.5em;
+    text-transform: uppercase;
+    width: 10em;
+    padding: 0.5em 1em;
+    margin: 3em 1em;
+}
+
+#companies thead, tfoot{
+    background-color: #c5bebe;
+    font-weight: bold;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+#companies th, #companies td {
+    border: 1px solid black;
+    padding: 8px;
+    font-family: "Lucida Console", "Courier New", monospace;
+
+}
+
+#companies tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#companies tr:hover {
+    background-color: #ddd;
+}
+
+#left-text-align {
+    text-align: left;
+}
+
+#companies {
+    border-collapse: collapse;
+    width: 100%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #46c7f8;
+    color: #000000;
+
+}
+
+/* --- SIPKY V HEADERU --- */
+header .arrow {
+    background-color: white;
+    padding: 0.2em;
+    border-radius: 50%;
+    font-size: 2em;
+    margin: 1em;
+    cursor: pointer;
+}
+
+header .arrow.left {
+    margin-right: auto;
+}
+
+@media screen and (max-width: 576px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    header .arrow {
+        margin: 0.5em;
+        font-size: 1.5em;
+    }
+}
+
+/* --- FOOTER --- */
+footer {
+    background: #f5f5f7;
+    color: black;
+    display: flex;
+    flex-wrap: wrap;
+    /*   padding: 2em 2em 5em 2em; */
+}
+
+footer div {
+    width: 100%;
+    text-align: center;
+}
+
+#foot {
+    opacity: 0.7
+}
+
+@media screen and (max-width: 576px) {
+    footer div {
+        width: 100%;
+    }
+}

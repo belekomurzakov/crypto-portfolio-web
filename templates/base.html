@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="cs">
+
+<! --- HEADER START --->
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <title>{% block title %}{% endblock %} - Flask</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+</head>
+<! --- HEADER END --->
+
+<body>
+
+<! --- Navigation Bar --->
+<nav>
+    <div id="menu-toggle" class="hamburger material-icons">menu</div>
+
+    <div id="menu">
+        <a href="/">Home</a>
+        <a href="/companies">Companies</a>
+
+        <a class="login material-icons" href={{ url_for('auth.login_form') }}>login</a>
+        <a class="logout material-icons" href={{ url_for('auth.logout') }}>logout</a>
+    </div>
+
+</nav>
+<! --- Navigation Bar --->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages | length > 0 %}
+        <div class="messages">
+            {% for category, message in get_flashed_messages(with_categories=true) %}
+                <div class="message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<! --- Main content --->
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+<! --- Main content --->
+
+
+<! --- Footer --->
+<footer id="contact">
+    <div>
+        <div id="foot"><p>© 2021 Omurzakov, Inc. All rights reserved.</p></div>
+    </div>
+</footer>
+<! --- Footer --->
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>
