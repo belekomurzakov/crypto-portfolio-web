@@ -1,3 +1,4 @@
+"""
 from datetime import datetime
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash
@@ -121,3 +122,4 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('homepage.introduction'))
+"""
