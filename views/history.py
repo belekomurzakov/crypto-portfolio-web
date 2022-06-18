@@ -1,17 +1,8 @@
-from flask import Blueprint, render_template, flash, request, url_for, redirect
+from flask import Blueprint, render_template, flash
 from database.database import get_db
-import requests
-import json
+from utility import RESTHub
 
 bp = Blueprint('history', __name__, url_prefix='/history')
-
-
-def get_current_data_dict():
-    req = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page'
-                       '=250&page=1&sparkline=true&price_change_percentage=24h')
-    data = json.loads(req.content)
-    crypto_by_id = dict([(str(crypto['id']), crypto) for crypto in data])
-    return crypto_by_id
 
 
 @bp.route('/', methods=['GET'])
@@ -27,7 +18,7 @@ def history_list():
         print('DB Error: ' + str(e))
     print('history_list after')
 
-    return render_template('history/history.html', history_data=history_data, data_dict=get_current_data_dict())
+    return render_template('history/history.html', history_data=history_data, data_dict=RESTHub.get_current_data_dict())
 
 
 @bp.route('/')

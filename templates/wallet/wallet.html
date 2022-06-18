@@ -9,6 +9,7 @@
             <th scope="col">#</th>
             <th scope="col">&emsp;&emsp;&emsp;&emsp;Coin</th>
             <th scope="col">Holdings</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -19,8 +20,14 @@
                          style="width:30px; height:30px;">&emsp;&emsp;{{ data_dict[datas['cryptoId']]['symbol'].upper() }}
                 </td>
                 <td>{{ "${:0.2f}".format(datas['amount']) }}</td>
+                <td>
+                    <a href="{{ url_for('wallet.modal', crypto_id = datas['cryptoId']) }}"
+                       class="btn btn-outline-danger">Sell</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    {% block modal %} {% endblock %}
+    {% block script %}{% endblock %}
 {% endblock %}

@@ -1,40 +1,27 @@
 from flask import Blueprint, render_template, flash, request, url_for, redirect
 # from flask_login import current_user
 from database.database import get_db
-import requests
-import json
+from utility import RESTHub
 
 bp = Blueprint('prices', __name__, url_prefix='/prices')
 
 
-def get_current_data():
-    req = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page'
-                       '=250&page=1&sparkline=true&price_change_percentage=24h')
-    data = json.loads(req.content)
-    return data
-
-
-def get_current_data_dict():
-    crypto_by_id = dict([(str(crypto['id']), crypto) for crypto in get_current_data()])
-    return crypto_by_id
-
-
 @bp.route('/', methods=['GET'])
 def price_list():
-    return render_template('prices/prices.html', data=get_current_data())
+    return render_template('prices/prices.html', data=RESTHub.get_current_data())
 
 
 @bp.route('/modal/<crypto_id>', methods=['GET', 'POST'])
 def modal(crypto_id):
-    crypto = get_current_data_dict()[crypto_id]
-    return render_template('prices/modal/modal.html', data=get_current_data(), crypto=crypto)
+    crypto = RESTHub.get_current_data_dict()[crypto_id]
+    return render_template('prices/modal/modal.html', data=RESTHub.get_current_data(), crypto=crypto)
 
 
 @bp.route('<crypto_id>', methods=['GET', 'POST'])
 def insert(crypto_id):
     db = get_db()
     data = request.form
-    crypto = get_current_data_dict()[crypto_id]
+    crypto = RESTHub.get_current_data_dict()[crypto_id]
 
     if request.method == 'POST':
         try:
