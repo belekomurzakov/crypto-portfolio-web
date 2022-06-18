@@ -1,4 +1,4 @@
 .idea/
  __pycache__/
 database/__pycache__/
-__pycache__/
+views/__pycache__/prices.cpython-310.pyc
