@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, request, url_for, redirect
 # from flask_login import current_user
 from database.database import get_db
-from utility import RESTHub
+from utility import RESTHub, ActivtityHistoryService, WalletService
 
 bp = Blueprint('prices', __name__, url_prefix='/prices')
 
@@ -25,23 +25,14 @@ def insert(crypto_id):
 
     if request.method == 'POST':
         try:
-            wallet = db.execute("SELECT id, amount "
-                                "FROM wallet WHERE cryptoId = ? AND userId = ?", (crypto_id, 1)).fetchall()
+            wallet = WalletService.find_wallet_asset_by(1, crypto_id)
+
             if not wallet:
-                new_id = db.execute("INSERT INTO wallet (userId, cryptoId, amount) "
-                                    "VALUES (?, ?, ?)",
-                                    (1, crypto_id, float(data['amount']) * crypto['current_price'])).lastrowid
-                db.commit()
-                return redirect(url_for('wallet.wallet_list'))
-
-            new_amount = float(wallet[0]['amount']) + (float(data['amount']) * crypto['current_price'])
-
-            db.execute("UPDATE wallet SET cryptoId = ?, amount = ? WHERE userId = ? and cryptoId = ?",
-                       (crypto_id, new_amount, 1, crypto_id))
-
-            inserted_id = db.execute("INSERT INTO activityHistory (userId, cryptoId, amount, isPurchased) "
-                                     "VALUES (?, ?, ?, ?)",
-                                     (1, crypto_id, float(data['amount']) * crypto['current_price'], 1)).lastrowid
+                WalletService.insert(1, crypto_id, float(data['amount']) * crypto['current_price'])
+            else:
+                new_amount = float(wallet['amount']) + (float(data['amount']) * crypto['current_price'])
+                WalletService.update(1, crypto_id, new_amount)
+            ActivtityHistoryService.insert(1, crypto_id, (float(data['amount']) * crypto['current_price']), 1)
 
             db.commit()
         except db.Error as e:

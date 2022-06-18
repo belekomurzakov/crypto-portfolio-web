@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash
 from database.database import get_db
-from utility import RESTHub
+from utility import RESTHub, ActivtityHistoryService
 
 bp = Blueprint('history', __name__, url_prefix='/history')
 
@@ -10,8 +10,7 @@ def history_list():
     db = get_db()
 
     try:
-        history_data = db.execute("SELECT * "
-                                  "FROM activityHistory").fetchall()
+        history_data = ActivtityHistoryService.find_all()
         db.commit()
     except db.Error as e:
         flash('There is some problem with database.', 'error')
