@@ -3,5 +3,29 @@
 {% block title %} History {% endblock %}
 
 {% block content %}
-
+    <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">&emsp;&emsp;&emsp;&emsp;Coin</th>
+            <th scope="col">Price</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for datas in history_data %}
+            <tr>
+                <th scope="row">{{ datas['id'] }}</th>
+                <td><img src="{{ data_dict[datas['cryptoId']]['image'] }}" alt=""
+                         style="width:30px; height:30px;">&emsp;&emsp;{{ data_dict[datas['cryptoId']]['symbol'].upper() }}
+                </td>
+                {% if datas['isPurchased'] == 1 %}
+                    <td style="color: mediumseagreen;">{{ "+{:0.2f}".format(datas['amount']) }}</td>
+                {% else %}
+                    <td style="color: red;">{{ "-{:0.2f}".format(datas['amount']) }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

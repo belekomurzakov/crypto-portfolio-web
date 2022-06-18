@@ -31,11 +31,12 @@
                 {% endif %}
                 <td>${{ datas['current_price'] }}</td>
                 <td>
-                    <button type="button" class="btn btn-success">Buy</button>
+                    <a href="{{ url_for('prices.modal', crypto_id = datas['id']) }}" class="btn btn-outline-success">Buy</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
+    {% block modal %} {% endblock %}
+    {% block script %}{% endblock %}
 {% endblock %}
