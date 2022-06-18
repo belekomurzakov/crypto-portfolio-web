@@ -3,5 +3,24 @@
 {% block title %} Wallet {% endblock %}
 
 {% block content %}
-
+    <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">&emsp;&emsp;&emsp;&emsp;Coin</th>
+            <th scope="col">Holdings</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for datas in portfolio %}
+            <tr>
+                <th scope="row">{{ datas['id'] }}</th>
+                <td><img src="{{ data_dict[datas['cryptoId']]['image'] }}" alt=""
+                         style="width:30px; height:30px;">&emsp;&emsp;{{ data_dict[datas['cryptoId']]['symbol'].upper() }}
+                </td>
+                <td>{{ "${:0.2f}".format(datas['amount']) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

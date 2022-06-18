@@ -15,10 +15,7 @@ def get_current_data():
 
 
 def get_current_data_dict():
-    req = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page'
-                       '=250&page=1&sparkline=true&price_change_percentage=24h')
-    data = json.loads(req.content)
-    crypto_by_id = dict([(str(crypto['id']), crypto) for crypto in data])
+    crypto_by_id = dict([(str(crypto['id']), crypto) for crypto in get_current_data()])
     return crypto_by_id
 
 
@@ -41,32 +38,30 @@ def insert(crypto_id):
 
     if request.method == 'POST':
         try:
-            wallet = db.executescript("SELECT id "
-                                      "FROM wallet"
-                                      ).fetchall()
-            print(wallet)
+            wallet = db.execute("SELECT id, amount "
+                                "FROM wallet WHERE cryptoId = ? AND userId = ?", (crypto_id, 1)).fetchall()
             if not wallet:
                 new_id = db.execute("INSERT INTO wallet (userId, cryptoId, amount) "
                                     "VALUES (?, ?, ?)",
                                     (1, crypto_id, float(data['amount']) * crypto['current_price'])).lastrowid
-                print("inserted wallet" + str(new_id))
+                db.commit()
+                return redirect(url_for('wallet.wallet_list'))
 
-            updated_item = db.execute("UPDATE wallet SET cryptoId = ?, amount = ? WHERE userId = ? ",
-                                      (crypto_id, float(data['amount']) * crypto['current_price'], 1))
-            print("updated wallet" + str(updated_item))
+            new_amount = float(wallet[0]['amount']) + (float(data['amount']) * crypto['current_price'])
 
-            new_activity_history = db.execute("INSERT INTO activityHistory (userId, cryptoId, amount, isPurchased) "
-                                              "VALUES (?, ?, ?, ?)",
-                                              (1, crypto_id, float(data['amount']) * crypto['current_price'],
-                                               1)).lastrowid
-            print("inserted activityHistory" + str(new_activity_history))
+            db.execute("UPDATE wallet SET cryptoId = ?, amount = ? WHERE userId = ? and cryptoId = ?",
+                       (crypto_id, new_amount, 1, crypto_id))
+
+            inserted_id = db.execute("INSERT INTO activityHistory (userId, cryptoId, amount, isPurchased) "
+                                     "VALUES (?, ?, ?, ?)",
+                                     (1, crypto_id, float(data['amount']) * crypto['current_price'], 1)).lastrowid
 
             db.commit()
         except db.Error as e:
             flash('There is some problem with database.', 'error')
             print('DB Error: ' + str(e))
 
-    return redirect(url_for('prices.price_list', data=get_current_data()))
+    return redirect(url_for('wallet.wallet_list'))
 
 
 @bp.route('/')
