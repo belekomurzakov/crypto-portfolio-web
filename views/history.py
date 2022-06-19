@@ -1,22 +1,14 @@
-from flask import Blueprint, render_template, flash
-from database.database import get_db
+from flask import Blueprint, render_template
 from utility import RESTHub, ActivtityHistoryService
+from flask_login import login_required, current_user
 
 bp = Blueprint('history', __name__, url_prefix='/history')
 
 
 @bp.route('/', methods=['GET'])
+@login_required
 def history_list():
-    db = get_db()
-
-    try:
-        history_data = ActivtityHistoryService.find_all()
-        db.commit()
-    except db.Error as e:
-        flash('There is some problem with database.', 'error')
-        print('DB Error: ' + str(e))
-    print('history_list after')
-
+    history_data = ActivtityHistoryService.find_by_user_id(current_user.user_id)
     return render_template('history/history.html', history_data=history_data, data_dict=RESTHub.get_current_data_dict())
 
 

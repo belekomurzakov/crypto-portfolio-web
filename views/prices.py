@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, request, url_for, redirect
-# from flask_login import current_user
+from flask_login import login_required, current_user
 from database.database import get_db
 from utility import RESTHub, ActivtityHistoryService, WalletService
 
@@ -12,6 +12,7 @@ def price_list():
 
 
 @bp.route('/modal/<crypto_id>', methods=['GET', 'POST'])
+@login_required
 def modal(crypto_id):
     crypto = RESTHub.get_current_data_dict()[crypto_id]
     return render_template('prices/modal/modal.html', data=RESTHub.get_current_data(), crypto=crypto)
@@ -25,14 +26,15 @@ def add_crypto(crypto_id):
 
     if request.method == 'POST':
         try:
-            wallet = WalletService.find_wallet_asset_by(1, crypto_id)
+            wallet = WalletService.find_wallet_asset_by(current_user.user_id, crypto_id)
 
             if not wallet:
-                WalletService.insert(1, crypto_id, float(data['amount']) * crypto['current_price'])
+                WalletService.insert(current_user.user_id, crypto_id, float(data['amount']) * crypto['current_price'])
             else:
                 new_amount = float(wallet['amount']) + (float(data['amount']) * crypto['current_price'])
-                WalletService.update(1, crypto_id, new_amount)
-            ActivtityHistoryService.insert(1, crypto_id, (float(data['amount']) * crypto['current_price']), 1)
+                WalletService.update(current_user.user_id, crypto_id, new_amount)
+            ActivtityHistoryService.insert(current_user.user_id, crypto_id,
+                                           (float(data['amount']) * crypto['current_price']), 1)
 
             db.commit()
         except db.Error as e:

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, request, url_for, redirect
-# from flask_login import current_user
+from flask_login import login_required, current_user
 from database.database import get_db
 from utility import RESTHub, WalletService, ActivtityHistoryService
 
@@ -7,17 +7,19 @@ bp = Blueprint('wallet', __name__, url_prefix='/wallet')
 
 
 @bp.route('/', methods=['GET'])
+@login_required
 def wallet_list():
-    portfolio = WalletService.find_all()
+    portfolio = WalletService.find_by_user_id(current_user.user_id)
     return render_template('wallet/wallet.html',
                            portfolio=portfolio,
                            data_dict=RESTHub.get_current_data_dict())
 
 
 @bp.route('/modal/<crypto_id>', methods=['GET', 'POST'])
+@login_required
 def modal(crypto_id):
     crypto = RESTHub.get_current_data_dict()[crypto_id]
-    portfolio = WalletService.find_all()
+    portfolio = WalletService.find_by_user_id(current_user.user_id)
     return render_template('wallet/modal/wallet-modal.html',
                            portfolio=portfolio,
                            data_dict=RESTHub.get_current_data_dict(),
@@ -32,17 +34,16 @@ def remove_crypto(crypto_id):
 
     if request.method == 'POST':
         try:
-            wallet = WalletService.find_wallet_asset_by(1, crypto_id)
+            wallet = WalletService.find_wallet_asset_by(current_user.user_id, crypto_id)
 
             if float(data['amount']) > wallet['amount']:
                 flash('You don\'t have such an assets', 'danger')
                 return redirect(url_for('wallet.wallet_list'))
 
             new_amount = float(wallet['amount']) - (float(data['amount']) * crypto['current_price'])
-
-            WalletService.update(1, crypto_id, new_amount)
-
-            ActivtityHistoryService.insert(1, crypto_id, (float(data['amount']) * crypto['current_price']), 0)
+            WalletService.update(current_user.user_id, crypto_id, new_amount)
+            ActivtityHistoryService.insert(current_user.user_id, crypto_id,
+                                           (float(data['amount']) * crypto['current_price']), 0)
 
             db.commit()
         except db.Error as e:

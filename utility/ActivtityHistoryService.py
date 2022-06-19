@@ -11,3 +11,8 @@ def insert(user_id, crypto_id, amount, is_purchased):
 def find_all():
     db = get_db()
     return db.execute("SELECT * FROM activityHistory").fetchall()
+
+
+def find_by_user_id(user_id):
+    db = get_db()
+    return db.execute("SELECT * FROM activityHistory WHERE userId = ?", user_id).fetchall()

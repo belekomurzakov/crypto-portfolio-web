@@ -1,5 +1,5 @@
 class User:
-    def __init__(self, user_id: int, username: str, active: bool, role: str):
+    def __init__(self, user_id: int, username: str, active: bool):
         self.is_authenticated = True  # is this user logged in?
         self.is_active = active  # is this user active = not banned?
         self.is_anonymous = False  # is this user registered?
@@ -7,7 +7,6 @@ class User:
 
         # custom attributes
         self.username = username
-        self.role = role
 
     def get_id(self):
         return self.user_id

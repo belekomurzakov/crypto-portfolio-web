@@ -40,7 +40,8 @@
                     <a class="nav-link" href="/prices">Prices</a>
                     <a class="nav-link" href="/wallet">Wallet</a>
                     <a class="nav-link" href="/history">History</a>
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href={{ url_for('auth.login_form') }}>Login</a>
+                    <a class="nav-link" href={{ url_for('auth.logout') }}>Logout</a>
                 </div>
             </div>
         </div>
@@ -69,10 +70,10 @@
             <div class="container p-4 pb-0">
                 <section class="">
                     <p class="d-flex justify-content-center align-items-center">
+                    <form action="{{ url_for('auth.registration') }}">
                         <span class="me-3">Register for free</span>
-                        <button type="button" class="btn btn-outline-light btn-rounded">
-                            Sign up!
-                        </button>
+                        <button type="submit" class="btn btn-outline-light btn-rounded">Sign up!</button>
+                    </form>
                     </p>
                 </section>
             </div>

@@ -1,10 +1,7 @@
-"""
-from datetime import datetime
-
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, LoginManager, login_required, logout_user
-
 from utility.User import User
+from utility import UserService
 from database.database import get_db
 from utility.auth import password_hash
 
@@ -17,15 +14,11 @@ def load_user(user_id):
     db = get_db()
 
     try:
-        user_data = db.execute(
-            "SELECT id, username, active FROM user WHERE id = ?",
-            (user_id,)
-        ).fetchone()
-
+        user_data = UserService.find_user_by_id(user_id)
         if user_data is None:
             return None
         else:
-            return User(user_data['id'], user_data['username'], user_data['active'] == 1, user_data['userRole'])
+            return User(user_data['id'], user_data['username'], user_data['isActive'] == 1)
 
     except db.Error as e:
         flash('There is some problem with database.', 'error')
@@ -35,14 +28,14 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    flash('You must login first!', 'error')
+    flash('You must login first!', 'danger')
     return redirect(url_for('auth.login_form'))
 
 
 @bp.get('/login')
 def login_form():
     after_registration = request.args.get('after_registration')
-    return render_template('auth/login.html', data={}, after_registration=after_registration)
+    return render_template('login/login.html', data={}, after_registration=after_registration)
 
 
 @bp.post('/login')
@@ -51,34 +44,29 @@ def login_action():
     data = request.form
 
     if 'username' not in data or 'password' not in data:
-        flash('Vyplňte prosím přihlašovací jméno a heslo!', 'error')
-        return render_template('auth/login.html', data=data)
+        flash('Fill a username and password!', 'error')
+        return render_template('login/login.html', data=data)
 
     try:
-        user_data = db.execute(
-            "SELECT id, username, password, active, userRole "
-            "FROM user "
-            "WHERE username = ? AND password = ?",
-            (data['username'], password_hash(data['password']))
-        ).fetchone()
+        user_data = UserService.find_user_by_username_password(data['username'], password_hash(data['password']))
 
         if user_data is None:
-            flash('Zadali jste nesprávné přihlašovací údaje.', 'error')
-            return render_template('auth/login.html', data=data)
+            flash('You entered wrong credentials.', 'danger')
+            return render_template('login/login.html', data=data)
 
-        user = User(user_data['id'], user_data['username'], user_data['active'] == 1, user_data['userRole'])
+        user = User(user_data['id'], user_data['username'], user_data['isActive'] == 1)
         login_user(user)
-        return redirect(url_for('companies.partner_list'))
+        return redirect(url_for('wallet.wallet_list'))
 
     except db.Error as e:
         flash('There is some problem with database.', 'error')
         print('DB Error: ' + str(e))
-        return render_template('auth/login.html', data=data)
+        return render_template('login/login.html', data=data)
 
 
 @bp.get('/registration')
 def registration():
-    return render_template('auth/registration.html', data={})
+    return render_template('login/registration.html', data={})
 
 
 @bp.post('/registration')
@@ -86,28 +74,15 @@ def register():
     db = get_db()
     data = request.form
 
-    if (
-            'username' not in data or len(data['username']) < 5 or
-            'password' not in data or len(data['password']) < 5
-    ):
-        return render_template('auth/registration.html',
-                               error='Uživatelské jméno musí mít minimálně 5 znaků!',
+    if 'username' not in data or len(data['username']) < 5 or 'password' not in data or len(data['password']) < 5:
+        return render_template('login/registration.html',
+                               error='Username should contain at least 5 symbols!',
                                data=data)
-
-    print('Zahashované heslo: ' + password_hash(data['password']))
+    print('Hash password: ' + password_hash(data['password']))
 
     try:
-        birthdate_timestamp = (datetime.timestamp(datetime.strptime(data['birthdate'], '%Y-%m-%d')) * 1000)
-
-        new_id = db.execute(
-            "INSERT INTO user (username, password, firstName, lastName, "
-            "userRole, mobile, street, city, country, birthdate, active) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (data['username'], password_hash(data['password']), data['firstName'], data['lastName'], data['role'],
-             data['phone'], data['street'], data['city'], data['country'], birthdate_timestamp, 1)
-        ).lastrowid
+        UserService.insert(data['username'], password_hash(data['password']), data['firstName'], data['lastName'], 1)
         db.commit()
-
         flash('Success registration!', 'success')
 
     except db.Error as e:
@@ -121,5 +96,4 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('homepage.introduction'))
-"""
+    return redirect(url_for('home.introduction'))

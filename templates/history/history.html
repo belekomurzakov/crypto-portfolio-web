@@ -15,7 +15,7 @@
         <tbody>
         {% for datas in history_data %}
             <tr>
-                <th scope="row">{{ datas['id'] }}</th>
+                <th scope="row">{{ history_data.index(datas) + 1 }}</th>
                 <td><img src="{{ data_dict[datas['cryptoId']]['image'] }}" alt=""
                          style="width:30px; height:30px;">&emsp;&emsp;{{ data_dict[datas['cryptoId']]['symbol'].upper() }}
                 </td>
