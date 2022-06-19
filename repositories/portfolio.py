@@ -1,7 +1,5 @@
 import sqlite3
-
 import pandas as pd
-
 from database.database import get_db
 
 

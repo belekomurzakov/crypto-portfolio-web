@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, LoginManager, login_required, logout_user
 from utility.User import User
-from utility import UserService
+from repositories import users
 from database.database import get_db
 from utility.auth import password_hash
 
@@ -14,7 +14,7 @@ def load_user(user_id):
     db = get_db()
 
     try:
-        user_data = UserService.find_user_by_id(user_id)
+        user_data = users.find_user_by_id(user_id)
         if user_data is None:
             return None
         else:
@@ -48,7 +48,7 @@ def login_action():
         return render_template('login/login.html', data=data)
 
     try:
-        user_data = UserService.find_user_by_username_password(data['username'], password_hash(data['password']))
+        user_data = users.find_user_by_username_password(data['username'], password_hash(data['password']))
 
         if user_data is None:
             flash('You entered wrong credentials.', 'danger')
@@ -81,7 +81,7 @@ def register():
     print('Hash password: ' + password_hash(data['password']))
 
     try:
-        UserService.insert(data['username'], password_hash(data['password']), data['firstName'], data['lastName'], 1)
+        users.insert(data['username'], password_hash(data['password']), data['firstName'], data['lastName'], 1)
         db.commit()
         flash('Success registration!', 'success')
 

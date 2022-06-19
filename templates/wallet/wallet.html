@@ -16,9 +16,9 @@
         </tr>
         </thead>
         <tbody>
-        {% for datas in portfolio %}
+        {% for datas in wallet %}
             <tr>
-                <th scope="row">{{ portfolio.index(datas) + 1 }}</th>
+                <th scope="row">{{ wallet.index(datas) + 1 }}</th>
                 <td><img src="{{ data_dict[datas['cryptoId']]['image'] }}" alt=""
                          style="width:30px; height:30px;">&emsp;&emsp;{{ data_dict[datas['cryptoId']]['symbol'].upper() }}
                 </td>

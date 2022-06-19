@@ -19,5 +19,3 @@ app.register_blueprint(history.bp)
 
 if __name__ == '__main__':
     app.run()
-
-# matplotlib

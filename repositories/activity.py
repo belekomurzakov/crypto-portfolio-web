@@ -1,7 +1,5 @@
 import sqlite3
-
 import pandas as pd
-
 from database.database import get_db
 
 
@@ -27,5 +25,4 @@ def find_by_user_id_as_df(user_id):
     df = pd.read_sql_query("SELECT * FROM activityHistory WHERE userId = ?", cnx, params=[user_id])
     cnx.commit()
     cnx.close()
-
     return df
