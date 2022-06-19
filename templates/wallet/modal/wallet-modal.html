@@ -30,7 +30,7 @@
 
                         <div class="form-group">
                             <label for="amount-value" class="col-form-label">Amount</label>
-                            <input type="number" name="amount" class="form-control" id="amount-value">
+                            <input type="number" min="1" name="amount" class="form-control" id="amount-value">
                         </div>
                         <div class="modal-footer">
                             <a href="{{ url_for('wallet.wallet_list') }}" class="btn btn-secondary">Close</a>
