@@ -1,5 +1,5 @@
 from flask import Flask
-from views import home, prices, wallet, history, auth
+from views import prices, wallet, history, auth
 from database import database
 from views.auth import login_manager
 
@@ -12,7 +12,6 @@ login_manager.init_app(app)
 
 # views
 app.register_blueprint(auth.bp)
-app.register_blueprint(home.bp)
 app.register_blueprint(prices.bp)
 app.register_blueprint(wallet.bp)
 app.register_blueprint(history.bp)

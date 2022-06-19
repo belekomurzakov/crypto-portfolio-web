@@ -96,4 +96,4 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('home.introduction'))
+    return redirect(url_for('prices.price_list'))

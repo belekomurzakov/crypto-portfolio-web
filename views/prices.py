@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from database.database import get_db
 from repositories import activity, cryptos, portfolio
 
-bp = Blueprint('prices', __name__, url_prefix='/prices')
+bp = Blueprint('prices', __name__, url_prefix='/')
 
 
 @bp.route('/', methods=['GET'])
