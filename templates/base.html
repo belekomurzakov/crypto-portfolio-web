@@ -47,16 +47,16 @@
         </div>
     </nav>
     <! --- Navigation Bar --->
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
         {% if messages %}
             {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible" role="alert">
-                    <!-- <strong>Title</strong> --> {{ message }}
-                </div>
+                <div class="alert alert-{{ category }} alert-dismissible" role="alert">{{ message }}</div>
             {% endfor %}
         {% endif %}
     {% endwith %}
+
     <! --- Main content --->
     <main>
         {% block content %}
@@ -74,7 +74,6 @@
                         <span class="me-3">Register for free</span>
                         <button type="submit" class="btn btn-outline-light btn-rounded">Sign up!</button>
                     </form>
-                    </p>
                 </section>
             </div>
             <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">

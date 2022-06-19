@@ -9,7 +9,7 @@
             <th scope="col">#</th>
             <th scope="col">&emsp;&emsp;&emsp;&emsp;Coin</th>
             <th scope="col">Price</th>
-            <th scope="col"></th>
+            <th scope="col">Date</th>
         </tr>
         </thead>
         <tbody>
@@ -22,8 +22,9 @@
                 {% if datas['isPurchased'] == 1 %}
                     <td style="color: mediumseagreen;">{{ "+{:0.2f}".format(datas['amount']) }}</td>
                 {% else %}
-                    <td style="color: red;">{{ "-{:0.2f}".format(datas['amount']) }}</td>
+                    <td style="color: red;">{{ "{:0.2f}".format(datas['amount']) }}</td>
                 {% endif %}
+                <td>{{ datas['created'] }}</td>
             </tr>
         {% endfor %}
         </tbody>

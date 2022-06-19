@@ -3,6 +3,9 @@
 {% block title %} Wallet {% endblock %}
 
 {% block content %}
+        <div id='chart' class='chart'></div>
+        <div id='line' class='chart'></div>
+
     <table class="table table-hover table-responsive">
         <thead>
         <tr>
@@ -30,4 +33,13 @@
     </table>
     {% block modal %} {% endblock %}
     {% block script %}{% endblock %}
+
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script type='text/javascript'>
+        let graphs = {{graph_json | safe}};
+        Plotly.plot('chart', graphs, {});
+        let line = {{line_json | safe}};
+        Plotly.plot('line', line, {});
+    </script>
+
 {% endblock %}

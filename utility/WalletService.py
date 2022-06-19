@@ -1,3 +1,7 @@
+import sqlite3
+
+import pandas as pd
+
 from database.database import get_db
 
 
@@ -22,9 +26,17 @@ def update(user_id, crypto_id, amount):
 
 def find_all():
     db = get_db()
-    return db.execute("SELECT * FROM wallet").fetchall()
+    return db.execute("SELECT * FROM wallet WHERE amount > 0").fetchall()
 
 
 def find_by_user_id(user_id):
     db = get_db()
-    return db.execute("SELECT * FROM wallet WHERE userId = ?", user_id).fetchall()
+    return db.execute("SELECT * FROM wallet WHERE userId = ? and amount > 0", user_id).fetchall()
+
+
+def find_by_user_id_as_df(user_id):
+    cnx = sqlite3.connect('database/db.sqlite')
+    df = pd.read_sql_query("SELECT * FROM wallet WHERE userId = ?", cnx, params=[user_id])
+    cnx.commit()
+    cnx.close()
+    return df

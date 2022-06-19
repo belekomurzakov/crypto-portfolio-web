@@ -8,6 +8,7 @@ bp = Blueprint('prices', __name__, url_prefix='/prices')
 
 @bp.route('/', methods=['GET'])
 def price_list():
+    print(RESTHub.get_current_data_dict()['bitcoin']['sparkline_in_7d'])
     return render_template('prices/prices.html', data=RESTHub.get_current_data())
 
 

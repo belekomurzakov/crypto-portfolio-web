@@ -19,6 +19,7 @@ CREATE TABLE activityHistory
     userId      INTEGER NOT NULL,
     amount      DOUBLE  NOT NULL,
     isPurchased INTEGER NOT NULL,
+    created     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (userId) REFERENCES user (id)
 );
 
