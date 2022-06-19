@@ -18,7 +18,7 @@ def modal(crypto_id):
 
 
 @bp.route('<crypto_id>', methods=['GET', 'POST'])
-def insert(crypto_id):
+def add_crypto(crypto_id):
     db = get_db()
     data = request.form
     crypto = RESTHub.get_current_data_dict()[crypto_id]
@@ -36,9 +36,9 @@ def insert(crypto_id):
 
             db.commit()
         except db.Error as e:
-            flash('There is some problem with database.', 'error')
+            flash('There is some problem with database.', 'danger')
             print('DB Error: ' + str(e))
-
+    flash('Successfully added new asset!', 'success')
     return redirect(url_for('wallet.wallet_list'))
 
 

@@ -1,4 +1,4 @@
-{% extends "prices/prices.html" %}
+{% extends "wallet/wallet.html" %}
 
 {% block title %} Modal {% endblock %}
 
@@ -16,7 +16,7 @@
 
                 <div class="modal-body">
 
-                    <form action="{{ url_for('prices.insert', crypto_id = crypto['id']) }}" method="post">
+                    <form action="{{ url_for('wallet.remove_crypto', crypto_id = crypto['id']) }}" method="post">
 
                         <div class="row">
                             <div class="col-md-4">
@@ -33,7 +33,7 @@
                             <input type="number" name="amount" class="form-control" id="amount-value">
                         </div>
                         <div class="modal-footer">
-                            <a href="{{ url_for('prices.price_list') }}" class="btn btn-secondary">Close</a>
+                            <a href="{{ url_for('wallet.wallet_list') }}" class="btn btn-secondary">Close</a>
                             <button type="submit" name="add_elem" class="btn btn-primary">Confirm</button>
                         </div>
                     </form>

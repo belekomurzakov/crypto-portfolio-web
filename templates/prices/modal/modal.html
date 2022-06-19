@@ -16,7 +16,7 @@
 
                 <div class="modal-body">
 
-                    <form action="{{ url_for('prices.insert', crypto_id = crypto['id']) }}" method="post">
+                    <form action="{{ url_for('prices.add_crypto', crypto_id = crypto['id']) }}" method="post">
 
                         <div class="row">
                             <div class="col-md-4">

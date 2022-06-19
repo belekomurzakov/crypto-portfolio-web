@@ -18,3 +18,8 @@ def update(user_id, crypto_id, amount):
     db = get_db()
     return db.execute("UPDATE wallet SET cryptoId = ?, amount = ? WHERE userId = ? and cryptoId = ?",
                       (crypto_id, amount, user_id, crypto_id))
+
+
+def find_all():
+    db = get_db()
+    return db.execute("SELECT * FROM wallet").fetchall()
